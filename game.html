@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Utsav-e-Solace</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        min-height: 100vh;
+        background: #512D3A;
+        color: #FAF3ED;
+        font-family: Arial, Helvetica, sans-serif;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
+
+    .screen {
+        width: 100%;
+        max-width: 430px;
+        min-height: 100vh;
+        padding: 35px 25px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        position: relative;
+    }
+
+    .wifi-icon {
+        font-size: 70px;
+        margin-bottom: 25px;
+        animation: pulse 1.5s infinite;
+    }
+
+    h1 {
+        font-size: 26px;
+        margin-bottom: 12px;
+    }
+
+    .network {
+        background: rgba(255,255,255,0.1);
+        border: 1px solid rgba(255,255,255,0.2);
+        padding: 15px 20px;
+        border-radius: 15px;
+        width: 100%;
+        margin: 20px 0;
+    }
+
+    .network-name {
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    .status {
+        margin-top: 12px;
+        font-size: 14px;
+        opacity: 0.7;
+    }
+
+    .loader {
+        width: 100%;
+        height: 7px;
+        background: rgba(255,255,255,0.15);
+        border-radius: 20px;
+        overflow: hidden;
+        margin-top: 20px;
+    }
+
+    .loader-bar {
+        height: 100%;
+        width: 0%;
+        background: #F8E4E2;
+        animation: loading 3s forwards;
+    }
+
+    .hidden {
+        display: none;
+    }
+
+    .access-denied {
+        font-size: 38px;
+        font-weight: 900;
+        margin-bottom: 15px;
+        animation: shake 0.5s;
+    }
+
+    .emoji {
+        font-size: 65px;
+        margin-bottom: 20px;
+    }
+
+    .subtitle {
+        font-size: 18px;
+        line-height: 1.5;
+        opacity: 0.9;
+        margin-bottom: 30px;
+    }
+
+    button {
+        border: none;
+        background: #F8E4E2;
+        color: #512D3A;
+        padding: 17px 30px;
+        border-radius: 50px;
+        font-size: 17px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: 0.25s;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+    }
+
+    button:hover {
+        transform: scale(1.05);
+    }
+
+    button:active {
+        transform: scale(0.96);
+    }
+
+    .mission {
+        background: #FAF3ED;
+        color: #512D3A;
+        padding: 25px;
+        border-radius: 22px;
+        width: 100%;
+        margin: 25px 0;
+        animation: pop 0.5s ease;
+    }
+
+    .mission-icon {
+        font-size: 55px;
+        margin-bottom: 12px;
+    }
+
+    .mission h2 {
+        font-size: 23px;
+        margin-bottom: 10px;
+    }
+
+    .mission p {
+        font-size: 15px;
+        line-height: 1.5;
+    }
+
+    .event {
+        margin-top: 20px;
+    }
+
+    .event-name {
+        font-size: 32px;
+        font-weight: 900;
+        letter-spacing: 1px;
+        color: #F8E4E2;
+    }
+
+    .tagline {
+        margin-top: 8px;
+        font-size: 14px;
+        opacity: 0.8;
+    }
+
+    .donation-info {
+        margin-top: 25px;
+        font-size: 14px;
+        line-height: 1.6;
+        opacity: 0.9;
+    }
+
+    .sparkle {
+        position: absolute;
+        font-size: 20px;
+        animation: float 3s infinite ease-in-out;
+        opacity: 0.7;
+    }
+
+    .s1 { top: 15%; left: 15%; }
+    .s2 { top: 25%; right: 15%; animation-delay: 1s; }
+    .s3 { bottom: 20%; left: 20%; animation-delay: 2s; }
+    .s4 { bottom: 15%; right: 20%; animation-delay: 1.5s; }
+
+    @keyframes loading {
+        from { width: 0%; }
+        to { width: 100%; }
+    }
+
+    @keyframes pulse {
+        0%,100% { transform: scale(1); }
+        50% { transform: scale(1.1); }
+    }
+
+    @keyframes shake {
+        0%,100% { transform: translateX(0); }
+        25% { transform: translateX(-8px); }
+        75% { transform: translateX(8px); }
+    }
+
+    @keyframes pop {
+        from {
+            transform: scale(0.8);
+            opacity: 0;
+        }
+        to {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+
+    @keyframes float {
+        0%,100% { transform: translateY(0); }
+        50% { transform: translateY(-15px); }
+    }
+</style>
+</head>
+
+<body>
+
+<div class="screen">
+
+    <div class="sparkle s1">✦</div>
+    <div class="sparkle s2">✧</div>
+    <div class="sparkle s3">✦</div>
+    <div class="sparkle s4">✧</div>
+
+    <!-- SCREEN 1 -->
+    <div id="wifiScreen">
+
+        <div class="wifi-icon">📶</div>
+
+        <h1>Connecting...</h1>
+
+        <div class="network">
+            <div class="network-name">
+                THAPAR_FREE_WIFI
+            </div>
+
+            <div class="status">
+                Establishing connection...
+            </div>
+
+            <div class="loader">
+                <div class="loader-bar"></div>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- SCREEN 2 -->
+    <div id="deniedScreen" class="hidden">
+
+        <div class="emoji">💀</div>
+
+        <div class="access-denied">
+            ACCESS DENIED
+        </div>
+
+        <p class="subtitle">
+            You thought this was Wi-Fi?
+            <br><br>
+            Nope.
+        </p>
+
+        <button onclick="unlock()">
+            BUT YOU UNLOCKED SOMETHING 👀
+        </button>
+
+    </div>
+
+
+    <!-- SCREEN 3 -->
+    <div id="missionScreen" class="hidden">
+
+        <div class="emoji">🎁</div>
+
+        <h1>Your Good Deed Mission</h1>
+
+        <div class="mission">
+
+            <div id="missionIcon" class="mission-icon">
+                👕
+            </div>
+
+            <h2 id="missionTitle">
+                THE CLOSET CLEANOUT
+            </h2>
+
+            <p id="missionText">
+                Find one clean piece of clothing
+                sitting unused in your room.
+            </p>
+
+        </div>
+
+        <div class="event">
+
+            <div class="event-name">
+                UTSAV-E-SOLACE
+            </div>
+
+            <div class="tagline">
+                A little from everyone. A lot for all. ❤️
+            </div>
+
+        </div>
+
+        <div class="donation-info">
+
+            Drop your unused:
+            <br>
+            👕 Clothes &nbsp; • &nbsp;
+            📚 Books & Stationery
+            <br>
+            🧸 Toys & Games &nbsp; • &nbsp;
+            🧴 Essentials
+            <br><br>
+
+            📦 Collection boxes are available
+            at your respective hostels.
+
+        </div>
+
+        <br>
+
+        <button onclick="newMission()">
+            🎲 GIVE ME ANOTHER
+        </button>
+
+    </div>
+
+</div>
+
+
+<script>
+
+const missions = [
+
+    {
+        icon: "👕",
+        title: "THE CLOSET CLEANOUT",
+        text: "Find one clean piece of clothing sitting unused in your room. Someone else might actually need it."
+    },
+
+    {
+        icon: "📚",
+        title: "THE DESK RAID",
+        text: "Find unused notebooks, pens, registers or books that have been collecting dust."
+    },
+
+    {
+        icon: "🧸",
+        title: "THE CHILDHOOD ARC",
+        text: "Find a toy or board game you have outgrown but someone else could enjoy."
+    },
+
+    {
+        icon: "🧴",
+        title: "THE ESSENTIALS DROP",
+        text: "Find an unused essential or toiletry item that could be useful to someone else."
+    }
+
+];
+
+
+function playSound(frequency = 500, duration = 100) {
+
+    try {
+
+        const audioContext =
+            new (window.AudioContext ||
+            window.webkitAudioContext)();
+
+        const oscillator =
+            audioContext.createOscillator();
+
+        const gain =
+            audioContext.createGain();
+
+        oscillator.connect(gain);
+        gain.connect(audioContext.destination);
+
+        oscillator.frequency.value = frequency;
+
+        gain.gain.setValueAtTime(
+            0.08,
+            audioContext.currentTime
+        );
+
+        gain.gain.exponentialRampToValueAtTime(
+            0.001,
+            audioContext.currentTime + duration / 1000
+        );
+
+        oscillator.start();
+
+        oscillator.stop(
+            audioContext.currentTime + duration / 1000
+        );
+
+    } catch(e) {}
+
+}
+
+
+setTimeout(() => {
+
+    document
+        .getElementById("wifiScreen")
+        .classList.add("hidden");
+
+    document
+        .getElementById("deniedScreen")
+        .classList.remove("hidden");
+
+    playSound(180, 250);
+
+}, 3500);
+
+
+function unlock() {
+
+    playSound(600, 150);
+
+    document
+        .getElementById("deniedScreen")
+        .classList.add("hidden");
+
+    document
+        .getElementById("missionScreen")
+        .classList.remove("hidden");
+
+    newMission();
+
+}
+
+
+function newMission() {
+
+    const mission =
+        missions[
+            Math.floor(
+                Math.random() * missions.length
+            )
+        ];
+
+    document.getElementById("missionIcon")
+        .textContent = mission.icon;
+
+    document.getElementById("missionTitle")
+        .textContent = mission.title;
+
+    document.getElementById("missionText")
+        .textContent = mission.text;
+
+    playSound(700, 100);
+
+}
+
+</script>
+
+</body>
+</html>
